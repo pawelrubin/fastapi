@@ -9,7 +9,7 @@ class UploadFile(StarletteUploadFile):
         yield cls.validate
 
     @classmethod
-    def validate(cls: Type["UploadFile"], v: Any) -> Any:
+    def validate(cls: Type["UploadFile"], v: Any) -> StarletteUploadFile:
         if not isinstance(v, StarletteUploadFile):
             raise ValueError(f"Expected UploadFile, received: {type(v)}")
         return v

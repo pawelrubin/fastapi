@@ -2,18 +2,19 @@ from collections import defaultdict
 from enum import Enum
 from pathlib import PurePath
 from types import GeneratorType
-from typing import Any, Callable, Dict, List, Optional, Set, Tuple, Union
+from typing import Any, Callable, Dict, List, Optional, Set, Tuple, Type, TypeVar, Union
 
 from pydantic import BaseModel
 from pydantic.json import ENCODERS_BY_TYPE
 
 SetIntStr = Set[Union[int, str]]
 DictIntStrAny = Dict[Union[int, str], Any]
+_T = TypeVar("_T")
 
 
 def generate_encoders_by_class_tuples(
-    type_encoder_map: Dict[Any, Callable]
-) -> Dict[Callable, Tuple]:
+    type_encoder_map: Dict[Type[_T], Callable[[_T], Union[str, float, list]]]
+) -> Dict[Callable[[_T], Union[str, float, list]], Tuple]:
     encoders_by_class_tuples: Dict[Callable, Tuple] = defaultdict(tuple)
     for type_, encoder in type_encoder_map.items():
         encoders_by_class_tuples[encoder] += (type_,)
@@ -63,7 +64,7 @@ def jsonable_encoder(
         return obj.value
     if isinstance(obj, PurePath):
         return str(obj)
-    if isinstance(obj, (str, int, float, type(None))):
+    if isinstance(obj, (str, int, float)) or obj is None:
         return obj
     if isinstance(obj, dict):
         encoded_dict = {}

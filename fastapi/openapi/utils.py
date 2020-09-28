@@ -153,7 +153,9 @@ def get_openapi_operation_metadata(*, route: routing.APIRoute, method: str) -> D
 
 
 def get_openapi_path(
-    *, route: routing.APIRoute, model_name_map: Dict[Type, str]
+    *,
+    route: routing.APIRoute,
+    model_name_map: Dict[Union[Type[BaseModel], Type[Enum]], str],
 ) -> Tuple[Dict, Dict, Dict]:
     path = {}
     security_schemes: Dict[str, Any] = {}

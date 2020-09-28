@@ -461,6 +461,7 @@ async def solve_generator(
             # This approach will work on newer python versions as well.
             call = getattr(call, "__call__", None)
         cm = asynccontextmanager(call)(**sub_values)
+    # cm is possibly unbound here
     return await stack.enter_async_context(cm)
 
 
